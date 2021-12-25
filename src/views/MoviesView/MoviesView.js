@@ -1,10 +1,13 @@
 import { useEffect, useState } from 'react';
+import { Link, useRouteMatch } from 'react-router-dom';
 import { fetchSearchedMovies } from '../../services/movies-service';
 
 function MoviesView() {
   const [searchedMovies, setSearchedMovies] = useState([]);
   const [inputValue, setInputValue] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
+
+  const { url } = useRouteMatch();
 
   const handleInputChange = e => {
     setInputValue(e.target.value);
@@ -37,7 +40,13 @@ function MoviesView() {
         />
         <button type="submit">Search</button>
       </form>
-      <ul></ul>
+      <ul>
+        {searchedMovies.map(movie => (
+          <li key={movie.id}>
+            <Link to={`${url}/${movie.id}`}>{movie.title}</Link>
+          </li>
+        ))}
+      </ul>
     </>
   );
 }
