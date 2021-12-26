@@ -1,52 +1,56 @@
 import { useEffect, useState } from 'react';
-import { Link, useRouteMatch } from 'react-router-dom';
+import {
+  Link,
+  Route,
+  useRouteMatch,
+  useHistory,
+  useLocation,
+} from 'react-router-dom';
+
 import { fetchSearchedMovies } from '../../services/movies-service';
+import SearchBar from '../../components/SearchBar';
 
 function MoviesView() {
-  const [searchedMovies, setSearchedMovies] = useState([]);
-  const [inputValue, setInputValue] = useState('');
-  const [searchQuery, setSearchQuery] = useState('');
-
   const { url } = useRouteMatch();
+  const history = useHistory();
+  const location = useLocation();
+  const searchQueryValue =
+    new URLSearchParams(location.search).get('query') ?? '';
 
-  const handleInputChange = e => {
-    setInputValue(e.target.value);
-  };
-
-  const handleFormSubmit = e => {
-    e.preventDefault();
-
-    setSearchQuery(inputValue);
-  };
+  const [searchedMovies, setSearchedMovies] = useState([]);
+  const [searchQuery, setSearchQuery] = useState(searchQueryValue);
 
   useEffect(() => {
     if (searchQuery === '') {
       return;
     }
 
-    fetchSearchedMovies(searchQuery).then(setSearchedMovies);
+    fetchSearchedMovies(searchQuery).then(({ results }) =>
+      setSearchedMovies(results),
+    );
   }, [searchQuery]);
+
+  const handleFormSubmit = inputValue => {
+    setSearchQuery(inputValue);
+
+    history.push({
+      ...location,
+      search: `query=${inputValue}`,
+    });
+  };
 
   return (
     <>
-      <form onSubmit={handleFormSubmit}>
-        <input
-          type="text"
-          autoComplete="off"
-          autoFocus
-          placeholder="Search images and photos"
-          value={inputValue}
-          onChange={handleInputChange}
-        />
-        <button type="submit">Search</button>
-      </form>
-      <ul>
-        {searchedMovies.map(movie => (
-          <li key={movie.id}>
-            <Link to={`${url}/${movie.id}`}>{movie.title}</Link>
-          </li>
-        ))}
-      </ul>
+      <SearchBar handleFormSubmit={handleFormSubmit} />
+      {
+        <ul>
+          {searchedMovies.map(movie => (
+            <li key={movie.id}>
+              <Link to={`${url}/${movie.id}`}>{movie.title}</Link>
+            </li>
+          ))}
+        </ul>
+      }
     </>
   );
 }

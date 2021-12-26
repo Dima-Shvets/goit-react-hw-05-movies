@@ -13,8 +13,14 @@ export function fetchSearchedMovies(query) {
   return fetchMovies(url);
 }
 
+export function fetchMovieById(id) {
+  const url = `${BASE_URL}/movie/${id}?api_key=${API_KEY}&language=en-US`;
+
+  return fetchMovies(url);
+}
+
 async function fetchMovies(url) {
   const movies = await fetch(url).then(res => res.json());
 
-  return movies.results;
+  return movies;
 }
