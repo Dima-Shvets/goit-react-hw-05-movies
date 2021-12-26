@@ -1,11 +1,5 @@
 import { useEffect, useState } from 'react';
-import {
-  Link,
-  Route,
-  useRouteMatch,
-  useHistory,
-  useLocation,
-} from 'react-router-dom';
+import { Link, useRouteMatch, useHistory, useLocation } from 'react-router-dom';
 
 import { fetchSearchedMovies } from '../../services/movies-service';
 import SearchBar from '../../components/SearchBar';

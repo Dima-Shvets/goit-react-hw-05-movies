@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-function SearchBar(handleFormSubmit) {
+function SearchBar({ handleFormSubmit }) {
   const [inputValue, setInputValue] = useState('');
 
   const handleInputChange = e => {

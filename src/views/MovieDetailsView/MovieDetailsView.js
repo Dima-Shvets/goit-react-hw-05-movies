@@ -1,14 +1,15 @@
-import { useParams } from 'react-router-dom';
+import { useParams, NavLink, useRouteMatch, Route } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 
 import { fetchMovieById } from '../../services/movies-service';
+import CastView from '../CastView';
+import ReviewsView from '../ReviewsView';
 
 function MovieDetailsView() {
-  const [movie, setMovie] = useState({});
-  const { title, release_date, vote_average, overview, genres, poster_path } =
-    movie;
-
   const { movieId } = useParams();
+  const { url } = useRouteMatch();
+
+  const [movie, setMovie] = useState(null);
 
   useEffect(() => {
     fetchMovieById(movieId).then(setMovie);
@@ -25,25 +26,45 @@ function MovieDetailsView() {
   };
 
   return (
-    Object.keys(movie).length !== 0 && (
+    <>
+      {movie && (
+        <div>
+          <img
+            src={`https://themoviedb.org/t/p/w1280${movie.poster_path}`}
+            alt={`${movie.title} poster`}
+            width="200"
+          />
+          <h2>{`${movie.title} (${separateYear(movie.release_date)})`}</h2>
+          <p>User score: {turnNumberRatingIntoPecent(movie.vote_average)}%</p>
+          <h3>Overview</h3>
+          <p>{movie.overview}</p>
+          <h3>Genres</h3>
+          <ul>
+            {movie.genres.map(genre => (
+              <li key={genre.id}>{genre.name}</li>
+            ))}
+          </ul>
+        </div>
+      )}
       <div>
-        <img
-          src={`https://themoviedb.org/t/p/w1280${poster_path}`}
-          alt={'qwe'}
-          width="200"
-        />
-        <h2>{`${title} (${separateYear(release_date)})`}</h2>
-        <p>User score: {turnNumberRatingIntoPecent(vote_average)}%</p>
-        <h3>Overview</h3>
-        <p>{overview}</p>
-        <h3>Genres</h3>
+        <h4>Additional information</h4>
         <ul>
-          {genres.map(genre => (
-            <li key={genre.id}>{genre.name}</li>
-          ))}
+          <li>
+            <NavLink to={`${url}/cast`}>Cast</NavLink>
+          </li>
+          <li>
+            <NavLink to={`${url}/reviews`}>Reviews</NavLink>
+          </li>
         </ul>
       </div>
-    )
+
+      <Route path="/movies/:movieId/cast" exact>
+        <CastView movieId={movieId} />
+      </Route>
+      <Route path="/movies/:movieId/reviews" exact>
+        <ReviewsView movieId={movieId} />
+      </Route>
+    </>
   );
 }
 

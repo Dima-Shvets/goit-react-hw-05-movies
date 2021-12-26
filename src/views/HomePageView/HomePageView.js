@@ -5,7 +5,7 @@ function HomePageView({ movies }) {
 
   return (
     <>
-      <h1>Tending Today</h1>
+      <h1>Trending Today</h1>
       <ul>
         {movies.map(movie => (
           <li key={movie.id}>
