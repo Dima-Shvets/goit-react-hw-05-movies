@@ -19,7 +19,7 @@ function SearchBar({ handleFormSubmit }) {
         type="text"
         autoComplete="off"
         autoFocus
-        placeholder="Search images and photos"
+        placeholder="Search movies"
         value={inputValue}
         onChange={handleInputChange}
       />

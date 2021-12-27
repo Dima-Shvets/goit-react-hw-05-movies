@@ -6,12 +6,20 @@ import {
   useRouteMatch,
   Route,
 } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, lazy, Suspense } from 'react';
+import Loader from 'react-loader-spinner';
 
 import { fetchMovieById } from '../../services/movies-service';
-import CastView from '../CastView';
-import ReviewsView from '../ReviewsView';
 import GoBackButton from '../../components/GoBackButton';
+
+import s from './MoviesDetailsView.module.scss';
+
+const CastView = lazy(() =>
+  import('../CastView' /* webpackChunkName: "cast-view" */),
+);
+const ReviewsView = lazy(() =>
+  import('../ReviewsView' /* webpackChunkName: "reviews-view" */),
+);
 
 function MovieDetailsView() {
   const { movieId } = useParams();
@@ -36,36 +44,43 @@ function MovieDetailsView() {
   };
 
   const turnNumberRatingIntoPecent = rating => {
-    return (rating / 10) * 100;
+    return Math.floor((rating / 10) * 100);
   };
 
   return (
-    <>
+    <section className={s.MovieDetailsView}>
       <GoBackButton
         handleGoBackButtonClick={handleGoBackButtonClick}
         label={location?.state?.from?.label ?? 'Go back'}
       />
       {movie && (
-        <div>
+        <div className={s.movie}>
           <img
+            className={s.poster}
             src={`https://themoviedb.org/t/p/w1280${movie.poster_path}`}
             alt={`${movie.title} poster`}
-            width="200"
+            width="250"
           />
-          <h2>{`${movie.title} (${separateYear(movie.release_date)})`}</h2>
-          <p>User score: {turnNumberRatingIntoPecent(movie.vote_average)}%</p>
-          <h3>Overview</h3>
-          <p>{movie.overview}</p>
-          <h3>Genres</h3>
-          <ul>
-            {movie.genres.map(genre => (
-              <li key={genre.id}>{genre.name}</li>
-            ))}
-          </ul>
+          <div className={s.movieInformation}>
+            <h2 className={s.element}>{`${movie.title} (${separateYear(
+              movie.release_date,
+            )})`}</h2>
+            <p className={s.element}>
+              User score: {turnNumberRatingIntoPecent(movie.vote_average)}%
+            </p>
+            <h3 className={s.element}>Overview</h3>
+            <p className={s.element}>{movie.overview}</p>
+            <h3 className={s.element}>Genres</h3>
+            <ul className={s.element}>
+              {movie.genres.map(genre => (
+                <li key={genre.id}>{genre.name}</li>
+              ))}
+            </ul>
+          </div>
         </div>
       )}
-      <div>
-        <h4>Additional information</h4>
+      <div className={s.additionalInformation}>
+        <h3 className={s.informationTitle}>Additional information</h3>
         <ul>
           <li>
             <NavLink to={`${url}/cast`}>Cast</NavLink>
@@ -75,14 +90,25 @@ function MovieDetailsView() {
           </li>
         </ul>
       </div>
-
-      <Route path="/movies/:movieId/cast" exact>
-        <CastView movieId={movieId} />
-      </Route>
-      <Route path="/movies/:movieId/reviews" exact>
-        <ReviewsView movieId={movieId} />
-      </Route>
-    </>
+      <Suspense
+        fallback={
+          <Loader
+            className="Loader"
+            type="BallTriangle"
+            color="#3f51b5"
+            height={150}
+            width={150}
+          />
+        }
+      >
+        <Route path="/movies/:movieId/cast" exact>
+          <CastView movieId={movieId} />
+        </Route>
+        <Route path="/movies/:movieId/reviews" exact>
+          <ReviewsView movieId={movieId} />
+        </Route>
+      </Suspense>
+    </section>
   );
 }
 

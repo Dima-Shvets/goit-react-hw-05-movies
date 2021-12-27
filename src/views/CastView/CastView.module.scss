@@ -1,0 +1,30 @@
+.list {
+  list-style: none;
+}
+
+.CastView {
+  padding-top: 15px;
+}
+
+.listElement:not(:last-child) {
+  margin-bottom: 15px;
+}
+
+.photo {
+  padding-bottom: 10px;
+}
+
+.name {
+  padding-bottom: 10px;
+}
+
+.noPhoto {
+  padding-right: 7px;
+  padding-left: 7px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100px;
+  height: 150px;
+  background-color: lightgray;
+}

@@ -1,0 +1,32 @@
+.MovieDetailsView {
+  padding-top: 15px;
+}
+
+.movie {
+  padding-top: 10px;
+  display: flex;
+  padding-bottom: 15px;
+  border-bottom: 3px solid gray;
+}
+
+.poster {
+  margin-right: 15px;
+}
+
+.movieInformation {
+  padding-top: 10px;
+}
+
+.element:not(:last-child) {
+  margin-bottom: 10px;
+}
+
+.additionalInformation {
+  padding-top: 15px;
+  padding-bottom: 15px;
+  border-bottom: 3px solid gray;
+}
+
+.informationTitle {
+  margin-bottom: 14px;
+}

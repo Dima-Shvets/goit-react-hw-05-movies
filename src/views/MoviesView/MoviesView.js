@@ -4,6 +4,8 @@ import { Link, useRouteMatch, useHistory, useLocation } from 'react-router-dom';
 import { fetchSearchedMovies } from '../../services/movies-service';
 import SearchBar from '../../components/SearchBar';
 
+import s from './MoviesView.module.scss';
+
 function MoviesView() {
   const { url } = useRouteMatch();
   const history = useHistory();
@@ -34,10 +36,10 @@ function MoviesView() {
   };
 
   return (
-    <>
+    <section className={s.MoviesView}>
       <SearchBar handleFormSubmit={handleFormSubmit} />
       {
-        <ul>
+        <ul className={s.list}>
           {searchedMovies.map(movie => (
             <li key={movie.id}>
               <Link to={`${url}/${movie.id}`}>{movie.title}</Link>
@@ -45,7 +47,7 @@ function MoviesView() {
           ))}
         </ul>
       }
-    </>
+    </section>
   );
 }
 

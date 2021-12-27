@@ -1,0 +1,22 @@
+.pageHeader {
+  width: 100%;
+  padding-top: 15px;
+  padding-bottom: 15px;
+  padding-left: 15px;
+  color: black;
+
+  border-bottom: 3px solid gray;
+}
+
+.link {
+  text-decoration: none;
+  color: inherit;
+}
+
+.link:not(:last-child) {
+  margin-right: 10px;
+}
+
+.activeLink {
+  color: orange;
+}
