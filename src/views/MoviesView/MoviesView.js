@@ -42,7 +42,19 @@ function MoviesView() {
         <ul className={s.list}>
           {searchedMovies.map(movie => (
             <li key={movie.id}>
-              <Link to={`${url}/${movie.id}`}>{movie.title}</Link>
+              <Link
+                to={{
+                  pathname: `${url}/${movie.id}`,
+                  state: {
+                    from: {
+                      location,
+                      label: 'Go back to movies',
+                    },
+                  },
+                }}
+              >
+                {movie.title}
+              </Link>
             </li>
           ))}
         </ul>
