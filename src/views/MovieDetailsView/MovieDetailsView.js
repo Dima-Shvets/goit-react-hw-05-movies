@@ -1,19 +1,33 @@
-import { useParams, NavLink, useRouteMatch, Route } from 'react-router-dom';
+import {
+  useParams,
+  useLocation,
+  useHistory,
+  NavLink,
+  useRouteMatch,
+  Route,
+} from 'react-router-dom';
 import { useEffect, useState } from 'react';
 
 import { fetchMovieById } from '../../services/movies-service';
 import CastView from '../CastView';
 import ReviewsView from '../ReviewsView';
+import GoBackButton from '../../components/GoBackButton';
 
 function MovieDetailsView() {
   const { movieId } = useParams();
   const { url } = useRouteMatch();
+  const location = useLocation();
+  const history = useHistory();
 
   const [movie, setMovie] = useState(null);
 
   useEffect(() => {
     fetchMovieById(movieId).then(setMovie);
   }, [movieId]);
+
+  const handleGoBackButtonClick = () => {
+    history.push(location?.state?.from?.location ?? '/movies');
+  };
 
   const separateYear = date => {
     const dateArray = date.split('-');
@@ -27,6 +41,10 @@ function MovieDetailsView() {
 
   return (
     <>
+      <GoBackButton
+        handleGoBackButtonClick={handleGoBackButtonClick}
+        label={location?.state?.from?.label ?? 'Go back'}
+      />
       {movie && (
         <div>
           <img

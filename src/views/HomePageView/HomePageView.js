@@ -1,6 +1,8 @@
-import { Link, useRouteMatch } from 'react-router-dom';
+import { Link, useRouteMatch, useLocation } from 'react-router-dom';
 
 function HomePageView({ movies }) {
+  const location = useLocation();
+
   const { url } = useRouteMatch();
 
   return (
@@ -9,7 +11,19 @@ function HomePageView({ movies }) {
       <ul>
         {movies.map(movie => (
           <li key={movie.id}>
-            <Link to={`${url}movies/${movie.id}`}>{movie.title}</Link>
+            <Link
+              to={{
+                pathname: `${url}movies/${movie.id}`,
+                state: {
+                  from: {
+                    location,
+                    label: 'Back to home page',
+                  },
+                },
+              }}
+            >
+              {movie.title}
+            </Link>
           </li>
         ))}
       </ul>
