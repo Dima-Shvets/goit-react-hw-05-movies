@@ -29,6 +29,8 @@ function MovieDetailsView() {
 
   const [movie, setMovie] = useState(null);
 
+  console.log(location);
+
   useEffect(() => {
     fetchMovieById(movieId).then(setMovie);
   }, [movieId]);
@@ -83,10 +85,24 @@ function MovieDetailsView() {
         <h3 className={s.informationTitle}>Additional information</h3>
         <ul>
           <li>
-            <NavLink to={`${url}/cast`}>Cast</NavLink>
+            <NavLink
+              to={{
+                pathname: `${url}/cast`,
+                state: location.state,
+              }}
+            >
+              Cast
+            </NavLink>
           </li>
           <li>
-            <NavLink to={`${url}/reviews`}>Reviews</NavLink>
+            <NavLink
+              to={{
+                pathname: `${url}/reviews`,
+                state: location.state,
+              }}
+            >
+              Reviews
+            </NavLink>
           </li>
         </ul>
       </div>
